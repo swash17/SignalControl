@@ -4,10 +4,10 @@ using System.Xml;
 using System.Xml.Serialization;
 
 
-namespace SwashSim_SignalControllerActuated
+namespace SwashSim_SignalControl
 {
     [Serializable]
-    public class TimingPlan
+    public class ActTimingPlan
     {
         [XmlAttribute("Plan_Number")]
         public uint Id;
@@ -20,11 +20,11 @@ namespace SwashSim_SignalControllerActuated
         public int StartTimeStep;
         public int EndTimeStep;
         public List<List<byte>> Rings = new List<List<byte>>();
-        [XmlArrayItem("Phase", typeof(TimingPlanPhase), IsNullable = false)]
-        public TimingPlanPhase[] Phases = new TimingPlanPhase[16];
-        
+        [XmlArrayItem("Phase", typeof(PhaseTimingData), IsNullable = false)]
+        public PhaseTimingData[] Phases = new PhaseTimingData[16];
 
-        public TimingPlan()
+
+        public ActTimingPlan()
         {
             //for (int i = 1; i <= 16; i++)
             //{
@@ -40,6 +40,8 @@ namespace SwashSim_SignalControllerActuated
 
     }
 
+
+    /*
     [Serializable]
     public class TimingPlanPhase
     {
@@ -50,14 +52,14 @@ namespace SwashSim_SignalControllerActuated
             Red = 3,
             Permitted = 4
         }
-        
+
         [XmlAttribute("Phase_Number")]
         public byte PhaseNumber;
-        public double MinGreen;
-        public double MaxGreen;
+        public double GreenMin;
+        public double GreenMax;
+        public double YellowTime;
+        public double AllRedTime;
         public double GapTime;
-        public double Yellow;
-        public double AllRed;
         public double SplitTime;
         public bool PhaseOmit;
         public bool MinRecall;
@@ -74,5 +76,7 @@ namespace SwashSim_SignalControllerActuated
         public List<byte> AssociatedDetectorIds = new List<byte>();
         //public ControlIndication Indication;
 
-    }
+    } */
+
+
 }

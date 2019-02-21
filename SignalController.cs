@@ -32,7 +32,7 @@ namespace SwashSim_SignalControl
 
     public class SignalController
     {
-        private UInt16 _id;
+        byte _id;
         string _label;
         SignalControlMode _controlMode;
         List<CycleData> _cycleInfo;
@@ -45,7 +45,7 @@ namespace SwashSim_SignalControl
         string _associatedLinkIdsString;
 
 
-        public SignalController(UInt16 id, SignalControlMode controlMode, string label = "")
+        public SignalController(byte id, SignalControlMode controlMode, string label = "")
         {
             _id = id;
             _label = label;
@@ -84,7 +84,7 @@ namespace SwashSim_SignalControl
 
 
 
-        public UInt16 Id
+        public byte Id
         {
             get { return _id; }
             set { _id = value; }
@@ -226,7 +226,7 @@ namespace SwashSim_SignalControl
             {
                 float IntersectionRefPhaseOffset = timingPlan.Coordination.ReferencePhaseOffsetRelativeToMasterSeconds + timingPlan.Coordination.ReferencePhaseCycleOffset;
 
-                float timeToAdvanceToStartOfCycle = timingPlan.Coordination.CycleLength - IntersectionRefPhaseOffset;                               
+                float timeToAdvanceToStartOfCycle = timingPlan.Coordination.CycleLength - IntersectionRefPhaseOffset;
 
                 foreach (TimingRingData TimingRing in timingPlan.TimingRings)
                 {
@@ -359,7 +359,7 @@ namespace SwashSim_SignalControl
         }
 
 
-        
+
 
 
 

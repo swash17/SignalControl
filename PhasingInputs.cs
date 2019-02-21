@@ -61,10 +61,12 @@ namespace SwashSim_SignalControl
         }
 
 
-        public static void SetPhaseStatus(TimingStageData timingStage, int phaseNum, int activeStage)  // ref bool[,] IsPhaseActive)
+        public static bool SetPhaseStatus(TimingStageData timingStage, int phaseNum, int activeStage)  // ref bool[,] IsPhaseActive)
         {
             //List<byte> PhaseNumsToCheck = new List<byte>();
-                        
+
+            bool WasPhaseAddedToList = false;
+
             bool IsPhaseNumInList = timingStage.IncludedPhases.Exists(item => item == phaseNum);
 
             if (IsPhaseNumInList == true)
@@ -75,8 +77,10 @@ namespace SwashSim_SignalControl
             }
             else
             {
-                AddPhaseToStageIfNoConflict(timingStage, phaseNum, activeStage);
+                WasPhaseAddedToList = AddPhaseToStageIfNoConflict(timingStage, phaseNum, activeStage);
             }
+
+            return WasPhaseAddedToList;
         }
 
         public static void PhaseBeingRemovedFromStage(TimingStageData timingStage, int phaseNum, int activeStage)
@@ -240,11 +244,7 @@ namespace SwashSim_SignalControl
                     break;
             }
 
-            if (DoNotEnablePhase == true)
-            {
-                //MessageBox.Show("A conflicting movement is already specified for this timing stage.", "Timing Stage Input Error");
-            }
-            else
+            if (DoNotEnablePhase == false)
             {
                 //IsPhaseActive[activeStage, phaseNum] = true;
                 timingStage.IncludedPhases.Add((byte)phaseNum);
@@ -252,7 +252,7 @@ namespace SwashSim_SignalControl
             return DoNotEnablePhase;
         }
 
-        
+
         private static bool CheckForPhasesPresentInTimingStage(List<byte> includedPhases, byte PhaseId1, byte PhaseId2, byte PhaseId3)  //  List<byte> phaseIdsToCheck)
         {
             foreach (byte PhaseId in includedPhases)
@@ -325,7 +325,7 @@ namespace SwashSim_SignalControl
                         {
                             newPhase = new PhaseTimingData(phaseNum, timingPlan.TimingStages[StageNum].GreenMin, timingPlan.TimingStages[StageNum].GreenMax, timingPlan.TimingStages[StageNum].YellowTime, timingPlan.TimingStages[StageNum].AllRedTime);
 
-                            timingPlan.TimingRings[1].Phases.Add(newPhase);                       
+                            timingPlan.TimingRings[1].Phases.Add(newPhase);
                             IsPhaseInPreviousStage[phaseNum] = true;
                         }
                         else

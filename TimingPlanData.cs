@@ -10,7 +10,7 @@ namespace SwashSim_SignalControl
     {
         uint _id;
         string _label;
-        List<TimingStageData> _timingStages;        
+        List<TimingStageData> _timingStages;
         List<TimingRingData> _timingRings;
         float _cycleLength;
         uint _startTimeSeconds;
@@ -21,14 +21,12 @@ namespace SwashSim_SignalControl
 
         public TimingPlanData(byte id, string label)  // byte[] ringOneIncludedPhases, byte[] ringTwoIncludedPhases, Single[,] ringOnePhaseIntervalTimes, Single[,] ringTwoPhaseIntervalTimes)
         {
-
             _id = id;
             _label = label;
             _timingStages = new List<TimingStageData>();
             _timingRings = new List<TimingRingData>();
             _startTimeSeconds = 0;
             _coordination = new CoordinationData();
-
         }
 
         public uint Id
@@ -70,6 +68,6 @@ namespace SwashSim_SignalControl
         public float CycleLength { get => _cycleLength; set => _cycleLength = value; }
     }
 
-    
+
 
 }

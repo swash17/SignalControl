@@ -4,24 +4,24 @@ using SwashSim_VehicleDetector;
 
 
 
-namespace SwashSim_SignalControllerActuated
+namespace SwashSim_SignalControl
 {
     public class SignalControllerActuated
     {
-        uint _id;
-        protected ControllerPhases _phases;        
+        byte _id;
+        protected ControllerPhases _phases;
         InterGreens _interGreens;
-        List<TimingPlan> _timingPlans;
-        TimingPlan _activeTimingPlan;
-        VehicleControlPoints _vehicleControlPoints;
-        Detectors _detectors;
+        List<ActTimingPlan> _timingPlans;
+        ActTimingPlan _activeTimingPlan;
+        VehicleControlPointsList _vehicleControlPoints;
+        DetectorsList _detectors;
 
         protected double _elapsedSimTime;
         private List<SignalStatusConvertor> _convertors;
 
         public int ID
         {
-            get { return (int)_id; }
+            get { return _id; }
         }
 
         public ControllerPhases Phases
@@ -29,20 +29,22 @@ namespace SwashSim_SignalControllerActuated
             get { return _phases; }
         }
 
-        public TimingPlan ActiveTimingPlan
+        public ActTimingPlan ActiveTimingPlan
         {
             get { return _activeTimingPlan; }
             set { _activeTimingPlan = value; }
         }
 
-        public Detectors Detectors
+        public DetectorsList Detectors
         {
             get { return _detectors; }
+            set { _detectors = value; }  //added by SSW
         }
 
-        public VehicleControlPoints VehicleControlPoints
+        public VehicleControlPointsList VehicleControlPoints
         {
             get { return _vehicleControlPoints; }
+            set { _vehicleControlPoints = value; }  //added by SSW
         }
 
         public InterGreens InterGreens
@@ -50,17 +52,17 @@ namespace SwashSim_SignalControllerActuated
             get { return _interGreens; }
         }
 
-        public List<TimingPlan> TimingPlans { get => _timingPlans; set => _timingPlans = value; }
+        public List<ActTimingPlan> TimingPlans { get => _timingPlans; set => _timingPlans = value; }
 
-        public SignalControllerActuated(uint ID)
+        public SignalControllerActuated(byte ID)
         {
             _id = ID;
             _elapsedSimTime = 0;
             _phases = new ControllerPhases();
             _interGreens = new InterGreens(ref _phases);
-            _timingPlans = new List<TimingPlan>();
-            _vehicleControlPoints = new VehicleControlPoints();
-            _detectors = new Detectors();
+            _timingPlans = new List<ActTimingPlan>();
+            _vehicleControlPoints = new VehicleControlPointsList();
+            _detectors = new DetectorsList();
             _convertors = new List<SignalStatusConvertor>();
         }
 
@@ -72,7 +74,7 @@ namespace SwashSim_SignalControllerActuated
             this._detectors.Add(Detector);
         }
 
-        public void AddTimingPlan(TimingPlan TimingPlan)
+        public void AddTimingPlan(ActTimingPlan TimingPlan)
         {
             this._timingPlans.Add(TimingPlan);
         }
@@ -85,7 +87,7 @@ namespace SwashSim_SignalControllerActuated
         public void SwitchPhase(uint FromPhaseID, uint ToPhaseID)
         {
             if (FromPhaseID == 0 || ToPhaseID == 0) return;
-            _convertors.Add(new SignalStatusConvertor(FromPhaseID, ToPhaseID, _elapsedSimTime, (double)Phases.GetByID(FromPhaseID).TimingPlanParameters.Yellow, InterGreens.GetInterGreenValue(FromPhaseID, ToPhaseID).InterGreenValue));
+            _convertors.Add(new SignalStatusConvertor(FromPhaseID, ToPhaseID, _elapsedSimTime, (double)Phases.GetByID(FromPhaseID).TimingPlanParameters.YellowTime, InterGreens.GetInterGreenValue(FromPhaseID, ToPhaseID).InterGreenValue));
         }
 
         public void UpdateSimTime(double ElapsedSimTime)
@@ -116,7 +118,7 @@ namespace SwashSim_SignalControllerActuated
         {
             foreach (ControllerPhase phase in this.Phases)
             {
-                VehicleControlPoints controlPoints = new VehicleControlPoints();
+                VehicleControlPointsList controlPoints = new VehicleControlPointsList();
                 foreach (uint VCID in phase.TimingPlanParameters.AssociatedControlPointIds)
                 {
                     controlPoints.Add(_vehicleControlPoints.GetByID(VCID));
@@ -177,20 +179,20 @@ namespace SwashSim_SignalControllerActuated
     {
         uint _id;
         SignalStatus _status;
-        Detectors _detectors;
+        DetectorsList _detectors;
         double _activeElapsedSimTime;
         double _desiredEndSimTime;
-        TimingPlanPhase _timingPlanParameters;
+        PhaseTimingData _timingPlanParameters;
         List<string> _statusRecord;
 
-        public ControllerPhase(uint ID, TimingPlanPhase TimingPlanParameters, Detectors Detectors)
+        public ControllerPhase(uint ID, PhaseTimingData TimingPlanParameters, DetectorsList Detectors)
         {
             _id = ID;
             _status = SignalStatus.Red;
             _activeElapsedSimTime = 0;
             _desiredEndSimTime = 0;
             _timingPlanParameters = TimingPlanParameters;
-            _detectors = new Detectors();
+            _detectors = new DetectorsList();
             _statusRecord = new List<string>();
             foreach (DetectorData detector in Detectors)
             {
@@ -215,7 +217,7 @@ namespace SwashSim_SignalControllerActuated
             set { _status = value; }
         }
 
-        public Detectors Detectors
+        public DetectorsList Detectors
         {
             get { return _detectors; }
         }
@@ -225,7 +227,7 @@ namespace SwashSim_SignalControllerActuated
             get { return _statusRecord; }
         }
 
-        public TimingPlanPhase TimingPlanParameters
+        public PhaseTimingData TimingPlanParameters
         {
             get { return this._timingPlanParameters; }
         }
@@ -433,7 +435,7 @@ namespace SwashSim_SignalControllerActuated
         }
     }
 
-    public class Detectors : List<DetectorData>
+    public class DetectorsList : List<DetectorData>
     {
         public DetectorData GetByID(uint ID)
         {
@@ -462,7 +464,7 @@ namespace SwashSim_SignalControllerActuated
         }
     }
 
-    public class VehicleControlPoints : List<VehicleControlPointData>
+    public class VehicleControlPointsList : List<VehicleControlPointData>
     {
         public VehicleControlPointData GetByID(uint ID)
         {

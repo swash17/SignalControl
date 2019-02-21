@@ -4,14 +4,14 @@ using System.Linq;
 using SwashSim_VehControlPoint;
 
 
-namespace SwashSim_SignalControllerActuated
+namespace SwashSim_SignalControl
 {
-    public class DualRingController : SignalControllerActuated
+    public class ActDualRingController : SignalControllerActuated
     {
         private List<Ring> _rings;
         private List<Barrier> _barriers;
 
-        public DualRingController(uint ID) : base(ID)
+        public ActDualRingController(byte ID) : base(ID)
         {
             _rings = new List<Ring>();
             _barriers = new List<Barrier>();
@@ -27,17 +27,17 @@ namespace SwashSim_SignalControllerActuated
                 double activeDuration = this.Phases.GetByID(activePhaseID).ActiveDuration(this._elapsedSimTime);
                 if (this.Phases.GetByID(activePhaseID).TimingPlanParameters.MaxRecall)
                 {
-                    this.Phases.GetByID(activePhaseID).SetDesiredPhaseEnd(this._elapsedSimTime - activeDuration + this.Phases.GetByID(activePhaseID).TimingPlanParameters.MaxGreen);
+                    this.Phases.GetByID(activePhaseID).SetDesiredPhaseEnd(this._elapsedSimTime - activeDuration + this.Phases.GetByID(activePhaseID).TimingPlanParameters.GreenMax);
                 }
                 else
                 {
                     if (this.Phases.GetByID(activePhaseID).Detectors.Call)
                     {
-                        double maxGreenEnd = (double)this.Phases.GetByID(activePhaseID).TimingPlanParameters.MaxGreen + this._elapsedSimTime - activeDuration;
+                        double maxGreenEnd = (double)this.Phases.GetByID(activePhaseID).TimingPlanParameters.GreenMax + this._elapsedSimTime - activeDuration;
                         double DesiredGreenEnd = this._elapsedSimTime + (double)Phases.GetByID(activePhaseID).TimingPlanParameters.GapTime;
                         this.Phases.GetByID(activePhaseID).SetDesiredPhaseEnd(maxGreenEnd < DesiredGreenEnd ? maxGreenEnd : DesiredGreenEnd);
                     }
-                    if (activeDuration < this.Phases.GetByID(activePhaseID).TimingPlanParameters.MinGreen) continue;
+                    if (activeDuration < this.Phases.GetByID(activePhaseID).TimingPlanParameters.GreenMin) continue;
                 }
 
                 if (activeDuration < this.Phases.GetByID(activePhaseID).DesiredDuration) continue;
@@ -105,7 +105,7 @@ namespace SwashSim_SignalControllerActuated
                         }
                     }
                 }
-            Next:
+                Next:
                 if (BarriersUnlocked)
                 {
                     if (ring.TargetPhaseID != ring.ActivePhaseID)
@@ -137,10 +137,10 @@ namespace SwashSim_SignalControllerActuated
             base.LoadTimingPlan();
             for (int i = 0; i < ActiveTimingPlan.Phases.Length; i++)
             {
-                TimingPlanPhase phaseParameters = ActiveTimingPlan.Phases[i];
+                PhaseTimingData phaseParameters = ActiveTimingPlan.Phases[i];
                 if (!phaseParameters.PhaseOmit)
                 {
-                    ControllerPhase tempCPhase = new ControllerPhase((uint)phaseParameters.PhaseNumber, phaseParameters, Detectors);
+                    ControllerPhase tempCPhase = new ControllerPhase((uint)phaseParameters.Id, phaseParameters, Detectors);
                     this.Phases.Add(tempCPhase);
                 }
             }
@@ -160,8 +160,8 @@ namespace SwashSim_SignalControllerActuated
             List<BarrierInRing> barriers = new List<BarrierInRing>();
             for (int i = 0; i < ActiveTimingPlan.Rings.Count(); i++)
             {
-                uint barrierID =0;
-                List<BarrierInRing> barriersInRing = new List<BarrierInRing>() ;
+                uint barrierID = 0;
+                List<BarrierInRing> barriersInRing = new List<BarrierInRing>();
                 for (int j = 0; j < ActiveTimingPlan.Rings[i].Count(); j++)
                 {
                     if (ActiveTimingPlan.Rings[i][j] == 0)
@@ -228,7 +228,7 @@ namespace SwashSim_SignalControllerActuated
                 {
                     if (phaseFrom.ID != phaseTo.ID)
                     {
-                        this.InterGreens.Add(new InterGreen(phaseFrom.ID, phaseTo.ID, phaseFrom.TimingPlanParameters.Yellow + phaseFrom.TimingPlanParameters.AllRed));
+                        this.InterGreens.Add(new InterGreen(phaseFrom.ID, phaseTo.ID, phaseFrom.TimingPlanParameters.YellowTime + phaseFrom.TimingPlanParameters.AllRedTime));
                     }
                 }
             }
@@ -255,7 +255,7 @@ namespace SwashSim_SignalControllerActuated
     {
         private uint _id;
         public uint ID { get => _id; }
-        
+
         public Barrier(uint ID)
             : base()
         {
@@ -286,7 +286,7 @@ namespace SwashSim_SignalControllerActuated
             }
         }
 
-        
+
 
         public void Reset()
         {
@@ -306,13 +306,13 @@ namespace SwashSim_SignalControllerActuated
         private uint _targetPhaseID;
         private ControllerPhases _phasesInController;
 
-        public uint ID { get => _id;}
+        public uint ID { get => _id; }
         public List<uint> Phases { get => _phaseIDs; }
         public List<BarrierInRing> BarrierInRings { get => _barrierInRings; }
         public uint SoftRecallPhaseID { get => _softRecallPhaseID; set => _softRecallPhaseID = value; }
         public uint TargetPhaseID { get => _targetPhaseID; set => _targetPhaseID = value; }
-        
-        
+
+
         public Ring(uint ID, ref ControllerPhases Phases)
         {
             _id = ID;
@@ -337,7 +337,7 @@ namespace SwashSim_SignalControllerActuated
             }
         }
 
-        
+
         public uint GetNextCallingPhase()
         {
             int index = _phaseIDs.IndexOf(ActivePhaseID);
@@ -413,7 +413,7 @@ namespace SwashSim_SignalControllerActuated
                     }
                     index = (index + 1) < _phaseIDs.Count ? (index + 1) : 0;
                 }
-                while (index != _phaseIDs.IndexOf(CallingPhaseID)) ;
+                while (index != _phaseIDs.IndexOf(CallingPhaseID));
             }
             else
             {
@@ -449,7 +449,7 @@ namespace SwashSim_SignalControllerActuated
         public uint PreviousPhaseID { get => _previousPhaseID; set => _previousPhaseID = value; }
         public uint NextPhaseID { get => _nextPhaseID; set => _nextPhaseID = value; }
         public bool Activated { get => _active; set => _active = value; }
-           
+
         public BarrierInRing(uint RingID, uint BarrierID, uint PreviousPhaseID, uint NextPhaseID)
         {
             _ringID = RingID;

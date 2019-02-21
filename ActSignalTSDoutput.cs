@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SwashSim_SignalControllerActuated
+namespace SwashSim_SignalControl
 {
     public class OutputSignalTSD
     {

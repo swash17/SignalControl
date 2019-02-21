@@ -2,12 +2,11 @@
 using SwashSim_VehicleDetector;
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 
 namespace SwashSim_SignalControl
 {
-
-    
 
     public enum PhaseInterval
     {
@@ -19,10 +18,11 @@ namespace SwashSim_SignalControl
         Red
     }
 
-
+    [Serializable]
     public class PhaseTimingData
     {
-        int ArraySize = 54002;
+        int ArraySize = 90002;
+        [XmlAttribute("ID")]
         byte _id;
         bool _isEnabled;
         Single _greenMin;
@@ -30,28 +30,38 @@ namespace SwashSim_SignalControl
         Single _yellowTime;
         Single _allRedTime;
         Single _redTime;
-
         Single _greenTimeElapsed;
         Single _yellowTimeElapsed;
         Single _allRedTimeElapsed;
         Single _redTimeElapsed;
-
         Single[] _intervalTimeRemaining;
         PhaseInterval[] _activeInterval;
-
         Single _unitExtension;
         int[] _intervalTimer;
-
-        ControlDisplayIndication[] _display;  // = new PhaseDisplay[54002];
-        //private List<byte> _associatedControlPointIds;
         string _associatedControlPointIdsString;
-        //private List<byte> _associatedDetectorIds;
         string _associatedDetectorIdsString;
-        //private System.Drawing.Color _displayColor;
-
         List<VehicleControlPointData> _associatedControlPoints;
         List<DetectorData> _associatedDetectors;
-        
+        ControlDisplayIndication[] _display;  // = new PhaseDisplay[54002];
+        //private System.Drawing.Color _displayColor;
+
+        //integrated from actuated control class
+        float _gapTime;
+        float _splitTime;
+        bool _phaseOmit;
+        bool _minRecall;
+        bool _maxRecall;
+        bool _softRecall;
+        bool _gapReduction;
+        float _timeBeforeReduction;
+        float _timeToReduce;
+        float _minimumGap;
+        bool _leadLeft;
+        float _pedGreen;
+        float _pedClearance;
+        List<byte> _associatedControlPointIds;
+        List<byte> _associatedDetectorIds;
+
 
         public PhaseTimingData()
         {
@@ -126,110 +136,46 @@ namespace SwashSim_SignalControl
         }
 
 
-        public byte Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-        public bool IsEnabled
-        {
-            get { return _isEnabled; }
-            set { _isEnabled = value; }
-        }
-        public Single GreenMin
-        {
-            get { return _greenMin; }
-            set { _greenMin = value; }
-        }
-        public Single GreenMax
-        {
-            get { return _greenMax; }
-            set { _greenMax = value; }
-        }
-        public Single YellowTime
-        {
-            get { return _yellowTime; }
-            set { _yellowTime = value; }
-        }
-        public Single RedTime
-        {
-            get { return _redTime; }
-            set { _redTime = value; }
-        }
-        public Single AllRedTime
-        {
-            get { return _allRedTime; }
-            set { _allRedTime = value; }
-        }
-        public Single GreenTimeElapsed
-        {
-            get { return _greenTimeElapsed; }
-            set { _greenTimeElapsed = value; }
-        }
-        public Single YellowTimeElapsed
-        {
-            get { return _yellowTimeElapsed; }
-            set { _yellowTimeElapsed = value; }
-        }
-        public Single AllRedTimeElapsed
-        {
-            get { return _allRedTimeElapsed; }
-            set { _allRedTimeElapsed = value; }
-        }
-        public Single RedTimeElapsed
-        {
-            get { return _redTimeElapsed; }
-            set { _redTimeElapsed = value; }
-        }
-        public Single[] IntervalTimeRemaining
-        {
-            get { return _intervalTimeRemaining; }
-            set { _intervalTimeRemaining = value; }
-        }
-        public PhaseInterval[] ActiveInterval
-        {
-            get { return _activeInterval; }
-            set { _activeInterval = value; }
-        }
-        public Single UnitExtension
-        {
-            get { return _unitExtension; }
-            set { _unitExtension = value; }
-        }
-        public int[] IntervalTimer
-        {
-            get { return _intervalTimer; }
-            set { _intervalTimer = value; }
-        }
-        public ControlDisplayIndication[] Display
-        {
-            get { return _display; }
-            set { _display = value; }
-        }
 
-        public List<VehicleControlPointData> AssociatedControlPoints
-        {
-            get { return _associatedControlPoints; }
-            set { _associatedControlPoints = value; }
-        }
+        public byte Id { get => _id; set => _id = value; }
+        public bool IsEnabled { get => _isEnabled; set => _isEnabled = value; }
+        public float GreenMin { get => _greenMin; set => _greenMin = value; }
+        public float GreenMax { get => _greenMax; set => _greenMax = value; }
+        public float YellowTime { get => _yellowTime; set => _yellowTime = value; }
+        public float AllRedTime { get => _allRedTime; set => _allRedTime = value; }
+        public float RedTime { get => _redTime; set => _redTime = value; }
+        public float GreenTimeElapsed { get => _greenTimeElapsed; set => _greenTimeElapsed = value; }
+        public float YellowTimeElapsed { get => _yellowTimeElapsed; set => _yellowTimeElapsed = value; }
+        public float AllRedTimeElapsed { get => _allRedTimeElapsed; set => _allRedTimeElapsed = value; }
+        public float RedTimeElapsed { get => _redTimeElapsed; set => _redTimeElapsed = value; }
+        public float[] IntervalTimeRemaining { get => _intervalTimeRemaining; set => _intervalTimeRemaining = value; }
+        public PhaseInterval[] ActiveInterval { get => _activeInterval; set => _activeInterval = value; }
+        public float UnitExtension { get => _unitExtension; set => _unitExtension = value; }
+        public int[] IntervalTimer { get => _intervalTimer; set => _intervalTimer = value; }
+        public string AssociatedControlPointIdsString { get => _associatedControlPointIdsString; set => _associatedControlPointIdsString = value; }
+        public string AssociatedDetectorIdsString { get => _associatedDetectorIdsString; set => _associatedDetectorIdsString = value; }
+        public List<VehicleControlPointData> AssociatedControlPoints { get => _associatedControlPoints; set => _associatedControlPoints = value; }
+        public List<DetectorData> AssociatedDetectors { get => _associatedDetectors; set => _associatedDetectors = value; }
+        public ControlDisplayIndication[] Display { get => _display; set => _display = value; }
 
-        public List<DetectorData> AssociatedDetectors
-        {
-            get { return _associatedDetectors; }
-            set { _associatedDetectors = value; }
-        }
 
-        public string AssociatedControlPointIdsString
-        {
-            get { return _associatedControlPointIdsString; }
-            set { _associatedControlPointIdsString = value; }
-        }
+        //integrated from actuated control class
+        public float GapTime { get => _gapTime; set => _gapTime = value; }
+        public float SplitTime { get => _splitTime; set => _splitTime = value; }
+        public bool PhaseOmit { get => _phaseOmit; set => _phaseOmit = value; }
+        public bool MinRecall { get => _minRecall; set => _minRecall = value; }
+        public bool MaxRecall { get => _maxRecall; set => _maxRecall = value; }
+        public bool SoftRecall { get => _softRecall; set => _softRecall = value; }
+        public bool GapReduction { get => _gapReduction; set => _gapReduction = value; }
+        public float TimeBeforeReduction { get => _timeBeforeReduction; set => _timeBeforeReduction = value; }
+        public float TimeToReduce { get => _timeToReduce; set => _timeToReduce = value; }
+        public float MinimumGap { get => _minimumGap; set => _minimumGap = value; }
+        public bool LeadLeft { get => _leadLeft; set => _leadLeft = value; }
+        public float PedGreen { get => _pedGreen; set => _pedGreen = value; }
+        public float PedClearance { get => _pedClearance; set => _pedClearance = value; }
+        public List<byte> AssociatedControlPointIds { get => _associatedControlPointIds; set => _associatedControlPointIds = value; }
+        public List<byte> AssociatedDetectorIds { get => _associatedDetectorIds; set => _associatedDetectorIds = value; }
 
-        public string AssociatedDetectorIdsString
-        {
-            get { return _associatedDetectorIdsString; }
-            set { _associatedDetectorIdsString = value; }
-        }
     }
 
 }

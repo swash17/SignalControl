@@ -21,8 +21,7 @@ namespace SwashSim_SignalControl
     [Serializable]
     public class PhaseTimingData
     {
-        int ArraySize = 90002;
-        [XmlAttribute("ID")]
+        int ArraySize = 90002;        
         byte _id;
         bool _isEnabled;
         Single _greenMin;
@@ -136,7 +135,7 @@ namespace SwashSim_SignalControl
         }
 
 
-
+        [XmlAttribute("Id")]
         public byte Id { get => _id; set => _id = value; }
         public bool IsEnabled { get => _isEnabled; set => _isEnabled = value; }
         public float GreenMin { get => _greenMin; set => _greenMin = value; }

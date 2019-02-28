@@ -109,10 +109,10 @@ namespace SwashSim_SignalControl
             }
         }
 
-        public virtual void UpdateLogic()
-        {
-            //Do not delete; this function is overridden in dual-ring controller class
-        }
+        //public virtual void UpdateLogic()
+        //{
+        //    //Do not delete; this function is overridden in dual-ring controller class
+        //}
 
         public virtual void UpdateControlPoints()
         {
@@ -153,17 +153,18 @@ namespace SwashSim_SignalControl
             }
         }
 
-        public void Run(double ElapsedSimTime)
+        public void Run(SignalControllerActuated signalActuated, double ElapsedSimTime)
         {
             UpdateSimTime(ElapsedSimTime);
-            UpdateLogic();
+            //UpdateLogic();
+            ((ActDualRingController)signalActuated).UpdateLogic();
             UpdateSignalStatus();
             UpdateControlPoints();
         }
 
         public void Run(double ElapsedSimTime, bool IsRecordPhaseStatus, bool IsRecordVCPStatus)
         {
-            this.Run(ElapsedSimTime);
+            //this.Run(ElapsedSimTime);
             if (IsRecordPhaseStatus)
             {
                 RecordPhaseStatus();

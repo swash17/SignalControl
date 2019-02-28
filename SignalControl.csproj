@@ -7,8 +7,8 @@
     <ProjectGuid>{DF272EBB-2F31-440B-BB8C-DCAA1358FE71}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SignalControl</RootNamespace>
-    <AssemblyName>SignalControl</AssemblyName>
+    <RootNamespace>SwashSim_SignalControl</RootNamespace>
+    <AssemblyName>SwashSim_SignalControl</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

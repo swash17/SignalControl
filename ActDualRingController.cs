@@ -17,9 +17,10 @@ namespace SwashSim_SignalControl
             _barriers = new List<Barrier>();
         }
 
-        public override void UpdateLogic()
+        //public override void UpdateLogic()
+        public void UpdateLogic()
         {
-            base.UpdateLogic();
+            // base.UpdateLogic();
             foreach (Ring ring in _rings)
             {
                 if (ring.ActivePhaseID == 0) continue;

@@ -66,10 +66,10 @@ namespace SwashSim_SignalControl
         {
             _intervalTimeRemaining = new Single[ArraySize];
             _activeInterval = new PhaseInterval[ArraySize];
-            _display = new ControlDisplayIndication[ArraySize];
-            //_associatedControlPointIds = new List<byte>();
+            _display = new ControlDisplayIndication[ArraySize];            
             _associatedControlPoints = new List<VehicleControlPointData>();
-            //_associatedDetectorIds = new List<byte>();
+            _associatedDetectorIds = new List<byte>();
+            _associatedControlPointIds = new List<byte>();
             _associatedDetectors = new List<DetectorData>();
         }
 
@@ -84,10 +84,10 @@ namespace SwashSim_SignalControl
 
             _intervalTimeRemaining = new Single[ArraySize];
             _activeInterval = new PhaseInterval[ArraySize];
-            _display = new ControlDisplayIndication[ArraySize];
-            //_associatedControlPointIds = new List<byte>();
+            _display = new ControlDisplayIndication[ArraySize];            
             _associatedControlPoints = new List<VehicleControlPointData>();
-            //_associatedDetectorIds = new List<byte>();
+            _associatedDetectorIds = new List<byte>();
+            _associatedControlPointIds = new List<byte>();
             _associatedDetectors = new List<DetectorData>();
         }
 
@@ -101,6 +101,7 @@ namespace SwashSim_SignalControl
 
             foreach (VehicleControlPointData controlPoint in controlPoints)
             {
+                //controlPointsList.Append(controlPoint.Id.ToString());
                 controlPointsList.Append(controlPoint.LinkId.ToString() + "-" + controlPoint.Id.ToString());
                 NumControlPoints++;
 
@@ -112,6 +113,7 @@ namespace SwashSim_SignalControl
             return ControlPointIDs;
         }
 
+        
         public string ConvertDetectorIdListToString(List<DetectorData> detectors)
         {
 

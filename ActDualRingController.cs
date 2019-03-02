@@ -17,10 +17,9 @@ namespace SwashSim_SignalControl
             _barriers = new List<Barrier>();
         }
 
-        //public override void UpdateLogic()
-        public void UpdateLogic()
+        public override void UpdateLogic()
         {
-            // base.UpdateLogic();
+            base.UpdateLogic();
             foreach (Ring ring in _rings)
             {
                 if (ring.ActivePhaseID == 0) continue;
@@ -68,7 +67,7 @@ namespace SwashSim_SignalControl
                     }
                     NextPhaseID = ring.GetNextPhase(NextPhaseID);
                 }
-                if (ring.ExistBarrior(activePhaseID, ring.TargetPhaseID))
+                if (ring.ExistBarrier(activePhaseID, ring.TargetPhaseID))
                 {
                     List<uint> BarrierIDs = ring.GetRelativeBarrierID(activePhaseID, ring.TargetPhaseID);
                     foreach (Barrier barrier in _barriers)
@@ -141,7 +140,7 @@ namespace SwashSim_SignalControl
                 PhaseTimingData phaseParameters = ActiveTimingPlan.Phases[i];
                 if (!phaseParameters.PhaseOmit)
                 {
-                    ControllerPhase tempCPhase = new ControllerPhase((uint)phaseParameters.Id, phaseParameters, Detectors);
+                    ControllerPhase tempCPhase = new ControllerPhase((uint)phaseParameters.Id, phaseParameters);  //, Detectors);
                     this.Phases.Add(tempCPhase);
                 }
             }
@@ -287,8 +286,6 @@ namespace SwashSim_SignalControl
             }
         }
 
-
-
         public void Reset()
         {
             foreach (BarrierInRing barrier in this)
@@ -371,7 +368,7 @@ namespace SwashSim_SignalControl
             }
         }
 
-        public bool ExistBarrior(uint ActivePhaseID, uint CallingPhaseID)
+        public bool ExistBarrier(uint ActivePhaseID, uint CallingPhaseID)
         {
             if (CallingPhaseID == 0) return false;
             if (ActivePhaseID == CallingPhaseID) return true;

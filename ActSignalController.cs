@@ -15,9 +15,10 @@ namespace SwashSim_SignalControl
         ActTimingPlan _activeTimingPlan;
         VehicleControlPointsList _vehicleControlPoints;
         DetectorsList _detectors;
+        List<uint> _associatedLinkIds;
 
         protected double _elapsedSimTime;
-        private List<SignalStatusConvertor> _convertors;
+        List<SignalStatusConvertor> _convertors;
 
         public int ID
         {
@@ -28,6 +29,8 @@ namespace SwashSim_SignalControl
         {
             get { return _phases; }
         }
+
+        public List<ActTimingPlan> TimingPlans { get => _timingPlans; set => _timingPlans = value; }
 
         public ActTimingPlan ActiveTimingPlan
         {
@@ -52,7 +55,7 @@ namespace SwashSim_SignalControl
             get { return _interGreens; }
         }
 
-        public List<ActTimingPlan> TimingPlans { get => _timingPlans; set => _timingPlans = value; }
+        public List<uint> AssociatedLinkIds { get => _associatedLinkIds; set => _associatedLinkIds = value; }
 
         public SignalControllerActuated(byte ID)
         {
@@ -64,6 +67,7 @@ namespace SwashSim_SignalControl
             _vehicleControlPoints = new VehicleControlPointsList();
             _detectors = new DetectorsList();
             _convertors = new List<SignalStatusConvertor>();
+            _associatedLinkIds = new List<uint>();
         }
 
         public virtual void LoadTimingPlan()
@@ -109,11 +113,12 @@ namespace SwashSim_SignalControl
             }
         }
 
-        //public virtual void UpdateLogic()
-        //{
-        //    //Do not delete; this function is overridden in dual-ring controller class
-        //}
+        public virtual void UpdateLogic()
+        {
+            //Do not delete; this function is overridden in dual-ring controller class
+        }
 
+        /*
         public virtual void UpdateControlPoints()
         {
             foreach (ControllerPhase phase in this.Phases)
@@ -134,6 +139,58 @@ namespace SwashSim_SignalControl
                 }
             }
         }
+        */
+
+        // Replacement method for above, by SSW ---------------------------------------------------------
+        public void UpdateControlPoints(SwashSim_Network.NetworkData Network, int timeIndex)
+        {
+            int LinkIndex;
+            
+            foreach (ControllerPhase phase in this.Phases)
+            {
+                foreach (VehicleControlPointData PhaseControlPoint in phase.TimingPlanParameters.AssociatedControlPoints)
+                {
+                    foreach (uint LinkId in this.AssociatedLinkIds)
+                    {
+                        try
+                        {
+                            LinkIndex = Network.Links.FindIndex(Link => Link.Id.Equals(LinkId));
+
+                            foreach (SwashSim_Network.LaneData Lane in Network.Links[LinkIndex].Lanes)
+                            {
+                                foreach (VehicleControlPointData LanecontrolPoint in Lane.ControlPoints)
+                                {
+                                    if (LanecontrolPoint.LinkId == PhaseControlPoint.LinkId && LanecontrolPoint.LaneId == Lane.Id && LanecontrolPoint.ControlPhaseId == PhaseControlPoint.ControlPhaseId)
+                                    {
+                                        if (phase.Status == SignalStatus.Green)
+                                        {
+                                            LanecontrolPoint.DisplayIndication = ControlDisplayIndication.Green;
+                                            phase.TimingPlanParameters.Display[timeIndex] = ControlDisplayIndication.Green;
+                                        }
+                                        if (phase.Status == SignalStatus.Yellow)
+                                        {
+                                            LanecontrolPoint.DisplayIndication = ControlDisplayIndication.Yellow;
+                                            phase.TimingPlanParameters.Display[timeIndex] = ControlDisplayIndication.Yellow;
+                                        }
+                                        if (phase.Status == SignalStatus.Red)
+                                        {
+                                            LanecontrolPoint.DisplayIndication = ControlDisplayIndication.Red;
+                                            phase.TimingPlanParameters.Display[timeIndex] = ControlDisplayIndication.Red;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        catch (System.Exception ex)
+                        {
+                            throw new System.Exception("UpdateControlPointDisplay Method; Signal Controller Id: " + this.ID + " Associated Link Id: " + LinkId.ToString() + " could not be found in network;", ex);
+                        }
+                    }
+                }
+            }
+        }
+        //-----------------------------------------------------------------------
+
 
         public void RecordPhaseStatus()
         {
@@ -156,10 +213,9 @@ namespace SwashSim_SignalControl
         public void Run(SignalControllerActuated signalActuated, double ElapsedSimTime)
         {
             UpdateSimTime(ElapsedSimTime);
-            //UpdateLogic();
-            ((ActDualRingController)signalActuated).UpdateLogic();
+            UpdateLogic();
             UpdateSignalStatus();
-            UpdateControlPoints();
+            //UpdateControlPoints();  //SSW--moved call to SimEngineMain so that Network links could be passed in
         }
 
         public void Run(double ElapsedSimTime, bool IsRecordPhaseStatus, bool IsRecordVCPStatus)
@@ -186,7 +242,7 @@ namespace SwashSim_SignalControl
         PhaseTimingData _timingPlanParameters;
         List<string> _statusRecord;
 
-        public ControllerPhase(uint ID, PhaseTimingData TimingPlanParameters, DetectorsList Detectors)
+        public ControllerPhase(uint ID, PhaseTimingData TimingPlanParameters) //, DetectorsList Detectors)
         {
             _id = ID;
             _status = SignalStatus.Red;
@@ -195,16 +251,22 @@ namespace SwashSim_SignalControl
             _timingPlanParameters = TimingPlanParameters;
             _detectors = new DetectorsList();
             _statusRecord = new List<string>();
-            foreach (DetectorData detector in Detectors)
+
+            //_detectors = (DetectorsList)TimingPlanParameters.AssociatedDetectors;  Cast does not work
+            foreach (DetectorData detector in TimingPlanParameters.AssociatedDetectors)
             {
-                foreach (byte detectorID in TimingPlanParameters.AssociatedDetectorIds)
-                {
-                    if (detectorID == detector.Id)
-                    {
-                        _detectors.Add(detector);
-                    }
-                }
+                _detectors.Add(detector);
             }
+
+            //foreach (DetectorData detector in Detectors)
+            //{
+            //    foreach (byte detectorID in TimingPlanParameters.AssociatedDetectorIds)
+            //    {
+            //        if (detectorID == detector.Id)
+            //            _detectors.Add(detector);
+            //    }
+            //}
+
         }
 
         public uint ID

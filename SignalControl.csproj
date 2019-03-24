@@ -56,6 +56,7 @@
     <Compile Include="ActSignalTSDoutput.cs" />
     <Compile Include="ActTestSignalControllerData.cs" />
     <Compile Include="ActTimingPlan.cs" />
+    <Compile Include="SignalControlMaster.cs" />
     <Compile Include="Coordination.cs" />
     <Compile Include="CycleData.cs" />
     <Compile Include="PhasingInputs.cs" />

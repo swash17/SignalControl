@@ -30,7 +30,7 @@ namespace SwashSim_SignalControl
     }
 
 
-    public class SignalController
+    public class SignalController : SignalControlMaster
     {
         byte _id;
         string _label;

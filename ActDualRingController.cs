@@ -462,4 +462,12 @@ namespace SwashSim_SignalControl
             this._active = true;
         }
     }
+    //public class BarrierChecks
+    //{
+    //    public static bool ConcurrencyCheck( dont know what should go here)
+    //    {
+    //      send messeage: "phases can not run concurrently. Please change phase sequence"
+    //      switch (
+    //    }  
+    //}
 }

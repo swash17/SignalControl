@@ -11,7 +11,7 @@ namespace SwashSim_SignalControl
 
         //Create virtual conflict monitor (MMU), i.e., a matrix of what movements can/cannot move together?
 
-        public static void UpdateSignalDisplays(SignalController sigController, int timeIndex, double timeStep)  //, List<VehicleControlPointData> controlPoints)
+        public static void UpdateSignalDisplays(SignalControllerPretimed sigController, int timeIndex, double timeStep)  //, List<VehicleControlPointData> controlPoints)
         {
             int NextPhaseIndex = 0;
             int TimingPlanNum = 0;
@@ -171,7 +171,7 @@ namespace SwashSim_SignalControl
         }
 
 
-        public static void UpdateControlPointDisplay(SignalController sigController, NetworkData Network, int timeIndex)
+        public static void UpdateControlPointDisplay(SignalControllerPretimed sigController, NetworkData Network, int timeIndex)
         {
             int ActiveTimingPlanId = 0;
             int LinkIndex;

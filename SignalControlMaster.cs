@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SwashSim_SignalControl
 {
 
-    public class SignalControlMaster
+    public class SignalController
     {
     //    byte _id;
     //    SignalControlMode _controlMode;

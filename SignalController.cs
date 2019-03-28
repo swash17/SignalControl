@@ -30,7 +30,7 @@ namespace SwashSim_SignalControl
     }
 
 
-    public class SignalController : SignalControlMaster
+    public class SignalControllerPretimed : SignalController
     {
         byte _id;
         string _label;
@@ -45,7 +45,7 @@ namespace SwashSim_SignalControl
         string _associatedLinkIdsString;
 
 
-        public SignalController(byte id, SignalControlMode controlMode, string label = "")
+        public SignalControllerPretimed(byte id, SignalControlMode controlMode, string label = "")
         {
             _id = id;
             _label = label;
@@ -146,11 +146,11 @@ namespace SwashSim_SignalControl
 
         //public float MasterClockMaxTimeSeconds { get => _masterClockMaxTimeSeconds; set => _masterClockMaxTimeSeconds = value; }
 
-        public void SetCoordinationParms(SignalController signal)  //List<SignalController> signalsPretimed)
+        public void SetCoordinationParms(SignalControllerPretimed signal)  //List<SignalControllerPretimed> signalsPretimed)
         {
             //bool IsReferencePhaseIdFound = false;
 
-            //foreach (SignalController signal in signalsPretimed)
+            //foreach (SignalControllerPretimed signal in signalsPretimed)
             //{
             foreach (TimingPlanData timingPlan in signal.TimingPlans)
             {

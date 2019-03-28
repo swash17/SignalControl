@@ -6,7 +6,7 @@ using SwashSim_VehicleDetector;
 
 namespace SwashSim_SignalControl
 {
-    public class SignalControllerActuated : SignalControlMaster
+    public class SignalControllerActuated : SignalController
     {
         byte _id;
         protected ControllerPhases _phases;

@@ -57,10 +57,11 @@ namespace SwashSim_SignalControl
 
         public List<uint> AssociatedLinkIds { get => _associatedLinkIds; set => _associatedLinkIds = value; }
 
-        public SignalControllerActuated(byte ID)
+        public SignalControllerActuated(byte ID, SignalControlMode controlMode) :base(ID,controlMode)
         {
             _id = ID;
             _elapsedSimTime = 0;
+            _controlMode = controlMode;
             _phases = new ControllerPhases();
             _interGreens = new InterGreens(ref _phases);
             _timingPlans = new List<ActTimingPlan>();

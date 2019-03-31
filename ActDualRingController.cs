@@ -10,11 +10,13 @@ namespace SwashSim_SignalControl
     {
         private List<Ring> _rings;
         private List<Barrier> _barriers;
+        SignalControlMode _controlMode;
 
-        public ActDualRingController(byte ID) : base(ID)
+        public ActDualRingController(byte ID,SignalControlMode controlMode) : base(ID, controlMode)
         {
             _rings = new List<Ring>();
             _barriers = new List<Barrier>();
+            _controlMode = controlMode;
         }
 
         public override void UpdateLogic()

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SwashSim_VehControlPoint;
+using SwashSim_VehicleDetector;
 
 namespace SwashSim_SignalControl
 {

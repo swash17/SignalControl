@@ -16,6 +16,7 @@ namespace SwashSim_SignalControl
         VehicleControlPointsList _vehicleControlPoints;
         DetectorsList _detectors;
         List<uint> _associatedLinkIds;
+        SignalControlMode _controlMode;
 
         protected double _elapsedSimTime;
         List<SignalStatusConvertor> _convertors;

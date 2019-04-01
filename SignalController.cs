@@ -5,7 +5,7 @@ using SwashSim_VehicleDetector;
 
 namespace SwashSim_SignalControl
 {
-    public enum SignalControlMode
+    public enum SignalControlMode //Signal control mode available options
     {
         None,
         Pretimed,
@@ -13,13 +13,13 @@ namespace SwashSim_SignalControl
         Pedestrian
     }
     
-    public class SignalController
+    public class SignalController //Parent class to determine which controller type to use
     {
         byte _Id;
         string _label;
         SignalControlMode _controlMode;
 
-        public SignalController(byte id, SignalControlMode controlMode, string label = "")
+        public SignalController(byte id, SignalControlMode controlMode, string label = "") //Logic method that tells the program which controller class to use (pretimed or actuated)
         {
             _Id = id;
             _label = label;

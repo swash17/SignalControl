@@ -8,23 +8,24 @@ namespace SwashSim_SignalControl
 {
     public class SignalControllerActuated : SignalController
     {
-        byte _id;
+        //byte _id;
         protected ControllerPhases _phases;
         InterGreens _interGreens;
         List<ActTimingPlan> _timingPlans;
         ActTimingPlan _activeTimingPlan;
         VehicleControlPointsList _vehicleControlPoints;
         DetectorsList _detectors;
-        List<uint> _associatedLinkIds;
-        SignalControlMode _controlMode;
+        //List<uint> _associatedLinkIds;
+        //SignalControlMode _controlMode;
 
         protected double _elapsedSimTime;
         List<SignalStatusConvertor> _convertors;
 
-        public int ID
-        {
-            get { return _id; }
-        }
+        //public byte ID
+        //{
+        //    get { return _id; }
+        //    set {_id = value;}
+        //}
 
         public ControllerPhases Phases
         {
@@ -56,20 +57,20 @@ namespace SwashSim_SignalControl
             get { return _interGreens; }
         }
 
-        public List<uint> AssociatedLinkIds { get => _associatedLinkIds; set => _associatedLinkIds = value; }
+        //public List<uint> AssociatedLinkIds { get => _associatedLinkIds; set => _associatedLinkIds = value; }
 
-        public SignalControllerActuated(byte ID, SignalControlMode controlMode) :base(ID,controlMode)
+        public SignalControllerActuated(byte ID, SignalControlMode controlMode) : base(ID, controlMode)
         {
-            _id = ID;
+            //_id = ID;
             _elapsedSimTime = 0;
-            _controlMode = controlMode;
+            //_controlMode = controlMode;
             _phases = new ControllerPhases();
             _interGreens = new InterGreens(ref _phases);
             _timingPlans = new List<ActTimingPlan>();
             _vehicleControlPoints = new VehicleControlPointsList();
             _detectors = new DetectorsList();
             _convertors = new List<SignalStatusConvertor>();
-            _associatedLinkIds = new List<uint>();
+            //_associatedLinkIds = new List<uint>();
         }
 
         public virtual void LoadTimingPlan()
@@ -185,7 +186,7 @@ namespace SwashSim_SignalControl
                         }
                         catch (System.Exception ex)
                         {
-                            throw new System.Exception("UpdateControlPointDisplay Method; Signal Controller Id: " + this.ID + " Associated Link Id: " + LinkId.ToString() + " could not be found in network;", ex);
+                            throw new System.Exception("UpdateControlPointDisplay Method; Signal Controller Id: " + this.Id + " Associated Link Id: " + LinkId.ToString() + " could not be found in network;", ex);
                         }
                     }
                 }

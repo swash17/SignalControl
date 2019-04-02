@@ -32,28 +32,23 @@ namespace SwashSim_SignalControl
 
     public class SignalControllerPretimed : SignalController
     {
-        byte _id;
-        string _label;
-        SignalControlMode _controlMode;
-        List<CycleData> _cycleInfo;
-
-        bool _isMaster;
-        float _localClockCurrentTimeSeconds;
+        //byte _id;
+        //string _label;
+        //SignalControlMode _controlMode;
+        
+        
         //float _masterClockMaxTimeSeconds;
         List<TimingPlanData> _timingPlans;
-        List<uint> _associatedLinkIds;
-        string _associatedLinkIdsString;
+        
 
-
-        public SignalControllerPretimed(byte id, SignalControlMode controlMode, string label = ""):base(id,controlMode,label)
+        public SignalControllerPretimed(byte id, SignalControlMode controlMode, string label = "") : base(id, controlMode, label)
         {
-            _id = id;
-            _label = label;
-            _controlMode = controlMode;
-
-            _cycleInfo = new List<CycleData>();
+            //_id = id;
+            //_label = label;
+            //_controlMode = controlMode;
+                        
             _timingPlans = new List<TimingPlanData>();
-            _associatedLinkIds = new List<uint>();
+            
 
             //if (_controlMode == SignalControlMode.Pretimed)
             //{
@@ -61,46 +56,27 @@ namespace SwashSim_SignalControl
             //}
         }
 
-        public string ConvertLinkIdListToString(List<UInt32> linkIds)
-        {
-            //Create string of vehicle control point IDs using comma to separate
-            System.Text.StringBuilder linksLIst = new System.Text.StringBuilder();
-
-            int TotalLinks = linkIds.Count;
-            int NumLinks = 0;
-
-            foreach (UInt32 linkID in linkIds)
-            {
-                linksLIst.Append(linkID);
-                NumLinks++;
-
-                if (NumLinks < TotalLinks)
-                    linksLIst.Append(",");
-            }
-
-            string LinkIDsString = linksLIst.ToString();
-            return LinkIDsString;
-        }
+        
 
 
 
-        public byte Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
+        //public byte Id
+        //{
+        //    get { return _id; }
+        //    set { _id = value; }
+        //}
 
-        public string Label
-        {
-            get { return _label; }
-            set { _label = value; }
-        }
+        //public string Label
+        //{
+        //    get { return _label; }
+        //    set { _label = value; }
+        //}
 
-        public SignalControlMode ControlMode
-        {
-            get { return _controlMode; }
-            set { _controlMode = value; }
-        }
+        //public SignalControlMode ControlMode
+        //{
+        //    get { return _controlMode; }
+        //    set { _controlMode = value; }
+        //}
 
         //private TimingStageData _phasePlan;
         //public TimingStageData PhasePlan
@@ -121,27 +97,10 @@ namespace SwashSim_SignalControl
             get { return _timingPlans; }
             set { _timingPlans = value; }
         }
-        public List<CycleData> CycleInfo
-        {
-            get { return _cycleInfo; }
-            set { _cycleInfo = value; }
-        }
+        
+        
 
-        public List<uint> AssociatedLinkIds
-        {
-            get { return _associatedLinkIds; }
-            set { _associatedLinkIds = value; }
-        }
-
-        public string AssociatedLinkIdsString
-        {
-            get { return _associatedLinkIdsString; }
-            set { _associatedLinkIdsString = value; }
-        }
-
-
-        public float LocalClockCurrentTimeSeconds { get => _localClockCurrentTimeSeconds; set => _localClockCurrentTimeSeconds = value; }
-        public bool IsMaster { get => _isMaster; set => _isMaster = value; }
+        
 
 
         //public float MasterClockMaxTimeSeconds { get => _masterClockMaxTimeSeconds; set => _masterClockMaxTimeSeconds = value; }

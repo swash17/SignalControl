@@ -10,6 +10,7 @@ namespace SwashSim_SignalControl
         None,
         Pretimed,
         Actuated,
+        RampMetering,
         Pedestrian
     }
     
@@ -32,14 +33,13 @@ namespace SwashSim_SignalControl
             _associatedLinkIds = new List<uint>();
             _cycleInfo = new List<CycleData>();
 
-            if (_controlMode == SignalControlMode.Actuated)
-            {
-                
-            }
-            else
-            {
-                _controlMode = SignalControlMode.Pretimed;
-            }
+            //if (_controlMode == SignalControlMode.Actuated)
+            //{                
+            //}
+            //else
+            //{
+            //    _controlMode = SignalControlMode.Pretimed;
+            //}
 
         }
 

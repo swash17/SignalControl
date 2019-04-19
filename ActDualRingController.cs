@@ -12,7 +12,7 @@ namespace SwashSim_SignalControl
         private List<Barrier> _barriers;
         SignalControlMode _controlMode;
 
-        public ActDualRingController(byte ID,SignalControlMode controlMode) : base(ID, controlMode)
+        public ActDualRingController(byte ID, SignalControlMode controlMode) : base(ID, controlMode)
         {
             _rings = new List<Ring>();
             _barriers = new List<Barrier>();
@@ -107,7 +107,7 @@ namespace SwashSim_SignalControl
                         }
                     }
                 }
-                Next:
+            Next:
                 if (BarriersUnlocked)
                 {
                     if (ring.TargetPhaseID != ring.ActivePhaseID)
@@ -464,12 +464,60 @@ namespace SwashSim_SignalControl
             this._active = true;
         }
     }
-    //public class BarrierChecks
-    //{
-    //    public static bool ConcurrencyCheck( dont know what should go here)
-    //    {
-    //      send messeage: "phases can not run concurrently. Please change phase sequence"
-    //      switch (
-    //    }  
-    //}
+//    public class BarrierChecks : SignalControllerActuated
+//    {
+//        public RingandBarrierCheck()
+//        {
+//            int RingOneTotal =
+//            int ringDifference = RingOneTotal - RingTwoTotal;
+
+//            int barrierOneRingOne = PhaseOneTime + PhaseTwoTime;
+//            int barrierOneRingTwo = PhaseFiveTime + PhaseSixTime;
+//            int barrierTwoRingOne = PhaseThreeTime + PhaseFourTime;
+//            int barrierTwoRingTwo = PhaseSevenTime + PhaseEightTime;
+
+//            int barrierLeftDifference = barrierOneRingOne - barrierOneRingTwo;
+//            int barrierRightDifference = barrierTwoRingOne - barrierTwoRingTwo;
+
+//            foreach (ControllerPhase phase in Phases)
+//            {
+
+//            }
+//            if (ringDifference == 0) continue;
+
+
+//            if (ringDifference > 0)
+//            {
+//                msgbox << "Total time for Ring 1 and Ring 2 are not equal. Ring 1 is " ringDifference " seconds longer than Ring 2. Balacne rings before continuing." << end1;
+//                DialogResult = MessageBox.Show("Note: \nThe dataset must be saved to a file if you want to retrieve it after restarting the program. \n\nAre you sure you want to exit?", "Input Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+
+//                if (ringDifference < 0)
+//                {
+//                    msgbox << "Total time for Ring 1 and Ring 2 are not equal. Ring 2 is " abs(ringDifference) " seconds longer than Ring 1. Balacne rings before continuing." << end1;
+
+//                }
+//            }
+
+//            if (barrierLeftDifference =/= 0 OR barrierRightDifference =/= 0) {
+//                if (barrierLeftDifference > 0)
+//                {
+//                    msgbox << "Total time of Phase 1 and Phase 2 do not equal the total time of Phase 5 and Phase 6. Phases 1 and 2 are " barrierLeftDifference " seconds longer than Phases 5 and 6. Balacne major street phases before continuing" << end1;
+//                }
+//                if (barrierLeftDifference < 0)
+//                {
+//                    msgbox << "Total time of Phase 1 and Phase 2 do not equal the total time of Phase 5 and Phase 6. Phases 5 and 6 are " abs(barrierLeftDifference) " seconds longer than Phases 1 and 2. Balacne major street phases before continuing" << end1;
+//                }
+//                if (barrierRightDifference > 0)
+//                {
+//                    msgbox << "Total time of Phase 3 and Phase 4 do not equal the total time of Phase 7 and Phase 8. Phases 3 and 4 are " barrierRightDifference " seconds longer than Phases 7 and 8. Balacne minor street phases before continuing" << end1;
+//                }
+//                if (barrierRightDifference < 0)
+//                {
+//                    msgbox << "Total time of Phase 3 and Phase 4 do not equal the total time of Phase 7 and Phase 8. Phases 7 and 8 are " abs(barrierRightDifference) " seconds longer than Phases 3 and 4. Balacne minor street phases before continuing" << end1;
+//                }
+//            }
+//        }
+//    }
+//}
+//    }
 }

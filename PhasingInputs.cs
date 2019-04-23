@@ -1,18 +1,15 @@
 ﻿using System.Collections.Generic;
 
 
-
 namespace SwashSim_SignalControl
 {
 
     public static class PhasingInputs
     {
-
         public static bool[] IsRing1Active = new bool[9];
         public static bool[] IsRing2Active = new bool[9];
         public static bool[] IsConcurGroup1Active = new bool[9];
         public static bool[] IsConcurGroup2Active = new bool[9];
-
 
 
         public static void InitializePhaseStatus(List<TimingStageData> timingStages)
@@ -60,12 +57,12 @@ namespace SwashSim_SignalControl
             }
         }
 
-
-        public static bool SetPhaseStatus(TimingStageData timingStage, int phaseNum, int activeStage)  // ref bool[,] IsPhaseActive)
+        public static bool[] SetPhaseStatus(TimingStageData timingStage, int phaseNum, int activeStage)  // ref bool[,] IsPhaseActive)
         {
-            //List<byte> PhaseNumsToCheck = new List<byte>();
+            bool[] PhaseListSettings = new bool[2];
 
-            bool WasPhaseAddedToList = false;
+            bool WasPhaseExcludedFromList = false;
+            bool WasPhasePreviouslyInList = false;
 
             bool IsPhaseNumInList = timingStage.IncludedPhases.Exists(item => item == phaseNum);
 
@@ -74,13 +71,16 @@ namespace SwashSim_SignalControl
                 int PhaseNumIndex = timingStage.IncludedPhases.FindIndex(item => item == phaseNum);
                 timingStage.IncludedPhases.RemoveAt(PhaseNumIndex);  //user has clicked on previously active phase in the stage, now remove it
                 PhaseBeingRemovedFromStage(timingStage, phaseNum, activeStage);
+                WasPhasePreviouslyInList = true;
             }
             else
             {
-                WasPhaseAddedToList = AddPhaseToStageIfNoConflict(timingStage, phaseNum, activeStage);
+                WasPhaseExcludedFromList = AddPhaseToStageIfNoConflict(timingStage, phaseNum, activeStage);
             }
 
-            return WasPhaseAddedToList;
+            PhaseListSettings[0] = WasPhaseExcludedFromList;
+            PhaseListSettings[1] = WasPhasePreviouslyInList;
+            return PhaseListSettings;
         }
 
         public static void PhaseBeingRemovedFromStage(TimingStageData timingStage, int phaseNum, int activeStage)

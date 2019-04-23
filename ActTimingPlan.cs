@@ -13,16 +13,18 @@ namespace SwashSim_SignalControl
         public uint Id;
         [XmlAttribute("Controller_ID")]
         public uint ControllerId;
+        public string Label;
         public uint MasterCid;
         public double CycleLength;
         public double Offset;
         public uint YieldPoint;
         public int StartTimeStep;
         public int EndTimeStep;
+        public string FilenameControlPoints;
+        public string FilenameDetectors;
         public List<List<byte>> Rings = new List<List<byte>>();
         [XmlArrayItem("Phase", typeof(PhaseTimingData), IsNullable = false)]
         public PhaseTimingData[] Phases = new PhaseTimingData[16];
-
 
         public ActTimingPlan()
         {

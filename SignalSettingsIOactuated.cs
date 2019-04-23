@@ -31,12 +31,12 @@ namespace SwashSim_SignalControl
             return timingPlans;
         }
 
-        public static VehicleControlPointsList OpenControlPointsFile() //(VehicleControlPointsList controlPoints) //(string filename)
+        public static VehicleControlPointsList OpenControlPointsFile(string filename) //(VehicleControlPointsList controlPoints)
         {
             //controlPoints = new VehicleControlPointsList();  // = new List<VehicleControlPointData>();           
 
             //string filename = @"X:\OneDrive\SwashSim\Projects\Signalized Intersections\Signal Timing_Actuated\Sig2-VehicleControlPoints.xml";
-            string filename = @"C:\Temp\SwashSim\Test Intersection\ActControlPoints.xml";
+            //string filename = @"C:\Temp\SwashSim\Test Intersection\ActControlPoints.xml";
             System.IO.FileStream myFileStream = new System.IO.FileStream(filename, System.IO.FileMode.Open);
             System.Xml.Serialization.XmlSerializer mySerializer = new System.Xml.Serialization.XmlSerializer(typeof(VehicleControlPointsList)); // (typeof(List<VehicleControlPointData>));
             VehicleControlPointsList controlPoints = (VehicleControlPointsList)mySerializer.Deserialize(myFileStream);  //(List<VehicleControlPointData>)mySerializer.Deserialize(myFileStream);
@@ -44,12 +44,12 @@ namespace SwashSim_SignalControl
             return controlPoints;
         }
 
-        public static DetectorsList OpenDetectorsFile() //(DetectorsList detectors) //(string filename)
+        public static DetectorsList OpenDetectorsFile(string filename) //(DetectorsList detectors)
         {
             //detectors = new DetectorsList();  // = new List<DetectorData>();
 
             //string filename = @"X:\OneDrive\SwashSim\Projects\Signalized Intersections\Signal Timing_Actuated\Sig2-Detectors.xml";
-            string filename = @"C:\Temp\SwashSim\Test Intersection\ActDetectors.xml";
+            //string filename = @"C:\Temp\SwashSim\Test Intersection\ActDetectors.xml";
             System.IO.FileStream myFileStream = new System.IO.FileStream(filename, System.IO.FileMode.Open);
             System.Xml.Serialization.XmlSerializer mySerializer = new System.Xml.Serialization.XmlSerializer(typeof(DetectorsList)); //(typeof(List<DetectorData>));
             DetectorsList detectors = (DetectorsList)mySerializer.Deserialize(myFileStream); //(List<DetectorData>)mySerializer.Deserialize(myFileStream);

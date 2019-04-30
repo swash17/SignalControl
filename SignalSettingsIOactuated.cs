@@ -40,6 +40,7 @@ namespace SwashSim_SignalControl
             System.IO.FileStream myFileStream = new System.IO.FileStream(filename, System.IO.FileMode.Open);
             System.Xml.Serialization.XmlSerializer mySerializer = new System.Xml.Serialization.XmlSerializer(typeof(VehicleControlPointsList)); // (typeof(List<VehicleControlPointData>));
             VehicleControlPointsList controlPoints = (VehicleControlPointsList)mySerializer.Deserialize(myFileStream);  //(List<VehicleControlPointData>)mySerializer.Deserialize(myFileStream);
+            myFileStream.Close();
 
             return controlPoints;
         }
@@ -53,6 +54,7 @@ namespace SwashSim_SignalControl
             System.IO.FileStream myFileStream = new System.IO.FileStream(filename, System.IO.FileMode.Open);
             System.Xml.Serialization.XmlSerializer mySerializer = new System.Xml.Serialization.XmlSerializer(typeof(DetectorsList)); //(typeof(List<DetectorData>));
             DetectorsList detectors = (DetectorsList)mySerializer.Deserialize(myFileStream); //(List<DetectorData>)mySerializer.Deserialize(myFileStream);
+            myFileStream.Close();
 
             return detectors;
         }

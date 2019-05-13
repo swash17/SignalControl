@@ -19,24 +19,9 @@ namespace SwashSim_SignalControl
             _phaseMetrics = new List<PhaseMetricsData>();
         }
 
-
-        public byte Id
-        {
-            get { return _id; }
-            set { _id = value; }
-        }
-
-        public List<byte> PhaseId
-        {
-            get { return _phaseId; }
-            set { _phaseId = value; }
-        }
-        public List<PhaseMetricsData> PhaseMetrics
-        {
-            get { return _phaseMetrics; }
-            set { _phaseMetrics = value; }
-        }
-
+        public byte Id { get => _id; set => _id = value; }
+        public List<byte> PhaseId { get => _phaseId; set => _phaseId = value; }
+        public List<PhaseMetricsData> PhaseMetrics { get => _phaseMetrics; set => _phaseMetrics = value; }
     }
 
 
@@ -49,41 +34,16 @@ namespace SwashSim_SignalControl
         int _beginVehicle;
         int _endVehicle;
 
-
-        public byte PhaseId
-        {
-            get { return _phaseId; }
-            set { _phaseId = value; }
-        }
-        public int StartGreen
-        {
-            get { return _startGreen; }
-            set { _startGreen = value; }
-        }
-
-        public int EndGreen
-        {
-            get { return _endGreen; }
-            set { _endGreen = value; }
-        }
-
-        public int BeginVehicle
-        {
-            get { return _beginVehicle; }
-            set { _beginVehicle = value; }
-        }
-
-        public int EndVehicle
-        {
-            get { return _endVehicle; }
-            set { _endVehicle = value; }
-        }
-
-
         public PhaseMetricsData()
         {
 
         }
+
+        public byte PhaseId { get => _phaseId; set => _phaseId = value; }
+        public int StartGreen { get => _startGreen; set => _startGreen = value; }
+        public int EndGreen { get => _endGreen; set => _endGreen = value; }
+        public int BeginVehicle { get => _beginVehicle; set => _beginVehicle = value; }
+        public int EndVehicle { get => _endVehicle; set => _endVehicle = value; }
     }
 
 

@@ -8,7 +8,7 @@ namespace SwashSim_SignalControl
 {
     public class SignalControllerActuated : SignalController
     {
-        //byte _id;
+        
         protected ControllerPhases _phases;
         InterGreens _interGreens;
         List<ActTimingPlan> _timingPlans;
@@ -16,17 +16,10 @@ namespace SwashSim_SignalControl
         VehicleControlPointsList _vehicleControlPoints;
         DetectorsList _detectors;
         //List<uint> _associatedLinkIds;
-        //SignalControlMode _controlMode;
-
         protected double _elapsedSimTime;
         List<SignalStatusConvertor> _convertors;
 
-        //public byte ID
-        //{
-        //    get { return _id; }
-        //    set {_id = value;}
-        //}
-
+        
         public ControllerPhases Phases
         {
             get { return _phases; }
@@ -61,9 +54,7 @@ namespace SwashSim_SignalControl
 
         public SignalControllerActuated(byte ID, SignalControlMode controlMode) : base(ID, controlMode)
         {
-            //_id = ID;
             _elapsedSimTime = 0;
-            //_controlMode = controlMode;
             _phases = new ControllerPhases();
             _interGreens = new InterGreens(ref _phases);
             _timingPlans = new List<ActTimingPlan>();

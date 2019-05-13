@@ -19,10 +19,7 @@ namespace SwashSim_SignalControl
             //List<byte[]> PhaseSequence = new List<byte[]>(2);
             List<byte> PhaseSequence1 = new List<byte>();
             List<byte> PhaseSequence2 = new List<byte>();
-                                               
-
-            //foreach (TimingRingData Ring in timingPlan.TimingRings)
-            //{
+            
 
             if (timingPlan.TimingRings[0] != null)
             {
@@ -34,8 +31,7 @@ namespace SwashSim_SignalControl
                     PhaseSequence1.Add(Phase.Id);
                 }
             }
-            //}
-
+            
 
             if (timingPlan.TimingRings[1] != null)
             {
@@ -70,9 +66,6 @@ namespace SwashSim_SignalControl
                 StageNum++;
 
             }
-
-
-
         }
 
 

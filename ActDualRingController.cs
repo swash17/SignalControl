@@ -299,12 +299,12 @@ namespace SwashSim_SignalControl
 
     public class Ring
     {
-        private uint _id;
-        private List<uint> _phaseIDs;
-        private List<BarrierInRing> _barrierInRings;
-        private uint _softRecallPhaseID;
-        private uint _targetPhaseID;
-        private ControllerPhases _phasesInController;
+        uint _id;
+        List<uint> _phaseIDs;
+        List<BarrierInRing> _barrierInRings;
+        uint _softRecallPhaseID;
+        uint _targetPhaseID;
+        ControllerPhases _phasesInController;
 
         public uint ID { get => _id; }
         public List<uint> Phases { get => _phaseIDs; }
@@ -438,11 +438,11 @@ namespace SwashSim_SignalControl
 
     public class BarrierInRing
     {
-        private uint _ringID;
-        private uint _barrierID;
-        private uint _previousPhaseID;
-        private uint _nextPhaseID;
-        private bool _active;
+        uint _ringID;
+        uint _barrierID;
+        uint _previousPhaseID;
+        uint _nextPhaseID;
+        bool _active;
 
         public uint RingID { get => _ringID; }
         public uint BarrierID { get => _barrierID; }
@@ -464,6 +464,7 @@ namespace SwashSim_SignalControl
             this._active = true;
         }
     }
+
 //    public class BarrierChecks : SignalControllerActuated
 //    {
 //        public RingandBarrierCheck()

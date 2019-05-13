@@ -4,15 +4,7 @@ using SwashSim_VehControlPoint;
 
 
 namespace SwashSim_SignalControl
-{
-
-    //public enum SignalControlMode
-    //{
-    //    None,
-    //    Pretimed,
-    //    Actuated,
-    //    Pedestrian
-    //}
+{    
 
     public enum StopBarIndication
     {
@@ -32,85 +24,20 @@ namespace SwashSim_SignalControl
 
     public class SignalControllerPretimed : SignalController
     {
-        //byte _id;
-        //string _label;
-        //SignalControlMode _controlMode;
-        
-        
-        //float _masterClockMaxTimeSeconds;
-        List<TimingPlanData> _timingPlans;
-        
+
+        List<TimingPlanData> _timingPlans;        
 
         public SignalControllerPretimed(byte id, SignalControlMode controlMode, string label = "") : base(id, controlMode, label)
         {
-            //_id = id;
-            //_label = label;
-            //_controlMode = controlMode;
-                        
-            _timingPlans = new List<TimingPlanData>();
-            
-
-            //if (_controlMode == SignalControlMode.Pretimed)
-            //{
-
-            //}
+                                    
+            _timingPlans = new List<TimingPlanData>();          
         }
 
+        public List<TimingPlanData> TimingPlans { get => _timingPlans; set => _timingPlans = value; }
         
 
-
-
-        //public byte Id
-        //{
-        //    get { return _id; }
-        //    set { _id = value; }
-        //}
-
-        //public string Label
-        //{
-        //    get { return _label; }
-        //    set { _label = value; }
-        //}
-
-        //public SignalControlMode ControlMode
-        //{
-        //    get { return _controlMode; }
-        //    set { _controlMode = value; }
-        //}
-
-        //private TimingStageData _phasePlan;
-        //public TimingStageData PhasePlan
-        //{
-        //    get { return _phasePlan; }
-        //    set { _phasePlan = value; }
-        //}
-
-        //private List<TimingStageData> _phasePlans = new List<TimingStageData>();
-        //public List<TimingStageData> PhasePlans
-        //{
-        //    get { return _phasePlans; }
-        //    set { _phasePlans = value; }
-        //}
-
-        public List<TimingPlanData> TimingPlans
-        {
-            get { return _timingPlans; }
-            set { _timingPlans = value; }
-        }
-        
-        
-
-        
-
-
-        //public float MasterClockMaxTimeSeconds { get => _masterClockMaxTimeSeconds; set => _masterClockMaxTimeSeconds = value; }
-
-        public void SetCoordinationParms(SignalControllerPretimed signal)  //List<SignalControllerPretimed> signalsPretimed)
-        {
-            //bool IsReferencePhaseIdFound = false;
-
-            //foreach (SignalControllerPretimed signal in signalsPretimed)
-            //{
+        public void SetCoordinationParms(SignalControllerPretimed signal)
+        {            
             foreach (TimingPlanData timingPlan in signal.TimingPlans)
             {
                 timingPlan.Coordination.ReferencePhaseCycleOffset = 0;
@@ -121,6 +48,7 @@ namespace SwashSim_SignalControl
                     {
                         foreach (int PhaseNum in TimingStage.IncludedPhases)
                         {
+                            //Identify timing stage that contains coordination reference phase
                             if (PhaseNum == timingPlan.Coordination.OffsetReferencePhaseId)
                             {
                                 timingPlan.Coordination.ReferenceTimingStageIndex = TimingStage.Id;
@@ -144,11 +72,6 @@ namespace SwashSim_SignalControl
             //}
             //}
         }
-
-
-        //public void PhaseInitialization(TimingPlanData timingPlan, bool isMasterController) //, List<VehicleControlPointData> ControlPoints)
-        //{                        
-        //}
 
 
 

@@ -24,7 +24,7 @@ namespace SwashSim_SignalControl
 
     public class CoordinationData
     {
-        byte _masterClockId;
+        byte _masterSignalId;
         float _cycleLength;
         float _offsetPctOfCycle;
         byte _offsetReferencePhaseId;
@@ -35,7 +35,7 @@ namespace SwashSim_SignalControl
         float _referencePhaseOffsetRelativeToMasterSeconds;
 
 
-        public byte MasterClockId { get => _masterClockId; set => _masterClockId = value; }
+        public byte MasterSignalId { get => _masterSignalId; set => _masterSignalId = value; }
         public float OffsetPctOfCycle { get => _offsetPctOfCycle; set => _offsetPctOfCycle = value; }
         public byte OffsetReferencePhaseId { get => _offsetReferencePhaseId; set => _offsetReferencePhaseId = value; }
         public float CycleLength { get => _cycleLength; set => _cycleLength = value; }

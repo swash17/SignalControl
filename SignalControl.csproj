@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActDualRingController.cs" />
-    <Compile Include="RampSignalController.cs" />
+    <Compile Include="SignalControllerOnRamp.cs" />
     <Compile Include="SignalControllerActuated.cs" />
     <Compile Include="ActSignalTSDoutput.cs" />
     <Compile Include="ActTestSignalControllerData.cs" />

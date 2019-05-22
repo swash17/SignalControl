@@ -75,7 +75,7 @@ namespace SwashSim_SignalControl
 
 
 
-        public void InitializeTimingStages(TimingPlanData timingPlan, bool isMasterController)
+        public void InitializeTimingStages(TimingPlanData timingPlan, bool isMasterController, float masterSignalRefPhaseOffset)
         {
             int timeIndex = 0;
 
@@ -100,21 +100,30 @@ namespace SwashSim_SignalControl
                     timingPlan.TimingRings[TimingRing.Id - 1].Phases[1].Display[timeIndex] = ControlDisplayIndication.Green;
                     timingPlan.TimingRings[TimingRing.Id - 1].Phases[1].GreenTimeElapsed = 0;
                     timingPlan.TimingRings[TimingRing.Id - 1].Phases[1].ActiveInterval[timeIndex] = PhaseInterval.MaxGreen;
-                    timingPlan.TimingRings[TimingRing.Id - 1].CurrentGreenPhaseId = (byte)timingPlan.TimingRings[TimingRing.Id - 1].Phases[1].Id;
+                    timingPlan.TimingRings[TimingRing.Id - 1].CurrentGreenPhaseId = timingPlan.TimingRings[TimingRing.Id - 1].Phases[1].Id;
                     SetControlPointDisplay(timingPlan, TimingRing, 1, ControlDisplayIndication.Green);
                 }
             }
             else
             {
-                float IntersectionRefPhaseOffset = timingPlan.Coordination.ReferencePhaseOffsetRelativeToMasterSeconds + timingPlan.Coordination.ReferencePhaseCycleOffset;
+                float CoordRefPhaseCycleStartTime = timingPlan.Coordination.ReferencePhaseOffsetRelativeToMasterSeconds + masterSignalRefPhaseOffset;
+                float TimeBetweenStartOfRefPhaseAndCycleEnd; // = timingPlan.Coordination.CycleLength - timingPlan.Coordination.ReferencePhaseCycleOffset;
 
-                float timeToAdvanceToStartOfCycle = timingPlan.Coordination.CycleLength - IntersectionRefPhaseOffset;
+                //float TimeToStartRefPhaseAfterCycleZeroPoint;
+                //if (CoordinationCycleTime > TimeBetweenStartOfRefPhaseAndCycleEnd)
+                if (CoordRefPhaseCycleStartTime > timingPlan.Coordination.CycleLength)
+                    //TimeToStartRefPhaseAfterCycleZeroPoint = Temp1 - TimeBetweenStartOfRefPhaseAndCycleEnd;
+                    TimeBetweenStartOfRefPhaseAndCycleEnd = 2 * timingPlan.Coordination.CycleLength - CoordRefPhaseCycleStartTime;
+                else
+                    //TimeToStartRefPhaseAfterCycleZeroPoint = timingPlan.Coordination.ReferencePhaseCycleOffset + timingPlan.Coordination.ReferencePhaseOffsetRelativeToMasterSeconds;
+                    TimeBetweenStartOfRefPhaseAndCycleEnd = timingPlan.Coordination.CycleLength - CoordRefPhaseCycleStartTime;
+               
 
                 foreach (TimingRingData TimingRing in timingPlan.TimingRings)
                 {
                     int PhaseSequenceIndex = -1;
                     bool StartingPhaseAndIntervalFound = false;
-                    float CumulativeCycleTime = 0;
+                    float CumulativeCycleTime = CoordRefPhaseCycleStartTime;  // 0;
                     List<byte> RingPhaseSequence = timingPlan.TimingRings[TimingRing.Id - 1].PhaseSequence;
 
                     foreach (int PhaseNum in RingPhaseSequence)
@@ -133,11 +142,14 @@ namespace SwashSim_SignalControl
                                     int PhaseIndex = timingPlan.TimingRings[TimingRing.Id - 1].Phases.FindIndex(item => item.Id == RingPhaseSequence[PhaseSequenceIndex]);
 
                                     //need to pass in cumulative phase time
-                                    StartingPhaseAndIntervalFound = IdentifyStartingPhaseAndInterval(timingPlan, TimingRing, RingPhaseSequence[PhaseSequenceIndex], PhaseIndex, timeIndex, CumulativeCycleTime, timeToAdvanceToStartOfCycle);
+                                    StartingPhaseAndIntervalFound = IdentifyStartingPhaseAndInterval(timingPlan, TimingRing, RingPhaseSequence[PhaseSequenceIndex], PhaseIndex, timeIndex, CumulativeCycleTime, /*TimeToStartRefPhaseAfterCycleZeroPoint*/ TimeBetweenStartOfRefPhaseAndCycleEnd, timingPlan.Coordination.CycleLength);
 
-                                    PhaseSequenceIndex++;
+                                    if (PhaseSequenceIndex < RingPhaseSequence.Count - 1)
+                                        PhaseSequenceIndex++;
+                                    else
+                                        PhaseSequenceIndex = 0;
 
-                                    CumulativeCycleTime += (timingPlan.TimingRings[TimingRing.Id - 1].Phases[PhaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[PhaseIndex].YellowTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[PhaseIndex].AllRedTime);
+                                        CumulativeCycleTime += (timingPlan.TimingRings[TimingRing.Id - 1].Phases[PhaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[PhaseIndex].YellowTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[PhaseIndex].AllRedTime);
                                 }
                                 while (StartingPhaseAndIntervalFound == false);
                             }
@@ -159,24 +171,28 @@ namespace SwashSim_SignalControl
         }
 
 
-        private bool IdentifyStartingPhaseAndInterval(TimingPlanData timingPlan, TimingRingData TimingRing, int phaseId, int phaseIndex, int timeIndex, float cumulativeCycleTime, float timeToAdvanceToStartOfCycle)
+        private bool IdentifyStartingPhaseAndInterval(TimingPlanData timingPlan, TimingRingData TimingRing, byte phaseId, int phaseIndex, int timeIndex, float cumulativeCycleTime, float timeToAdvanceToStartOfCycle, float cycleLen)
         {
             bool PhaseAndIntervalFound = false;
             float PhaseTimeElapsed = 0;
 
-            if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax > timeToAdvanceToStartOfCycle)
+            if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax > cycleLen)  //timeToAdvanceToStartOfCycle
             {
-                PhaseTimeElapsed = (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax) - timeToAdvanceToStartOfCycle;
+                //if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax /*+ timeToAdvanceToStartOfCycle*/ <= cycleLen)
+                //    PhaseTimeElapsed = (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax) - timeToAdvanceToStartOfCycle;
+                //else
+                    //PhaseTimeElapsed = (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timeToAdvanceToStartOfCycle) - cycleLen;
+                    PhaseTimeElapsed = cycleLen - cumulativeCycleTime; // timeToAdvanceToStartOfCycle;   //cycleLen - timeToAdvanceToStartOfCycle;
 
                 timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].Display[timeIndex] = ControlDisplayIndication.Green;
                 timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenTimeElapsed = PhaseTimeElapsed;
                 timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].ActiveInterval[timeIndex] = PhaseInterval.MaxGreen;
                 timingPlan.TimingRings[TimingRing.Id - 1].ActivePhaseIndex = (byte)phaseIndex;
-                timingPlan.TimingRings[TimingRing.Id - 1].CurrentGreenPhaseId = (byte)phaseId;
+                timingPlan.TimingRings[TimingRing.Id - 1].CurrentGreenPhaseId = phaseId;
                 SetControlPointDisplay(timingPlan, TimingRing, phaseIndex, ControlDisplayIndication.Green);
                 PhaseAndIntervalFound = true;
             }
-            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax == timeToAdvanceToStartOfCycle)
+            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax == cycleLen)  //timeToAdvanceToStartOfCycle
             {
                 timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].Display[timeIndex] = ControlDisplayIndication.Yellow;
                 timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTimeElapsed = 0;
@@ -185,7 +201,7 @@ namespace SwashSim_SignalControl
                 SetControlPointDisplay(timingPlan, TimingRing, phaseIndex, ControlDisplayIndication.Yellow);
                 PhaseAndIntervalFound = true;
             }
-            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime > timeToAdvanceToStartOfCycle)
+            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime > cycleLen)  //timeToAdvanceToStartOfCycle
             {
                 PhaseTimeElapsed = (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime) - timeToAdvanceToStartOfCycle;
 
@@ -196,7 +212,7 @@ namespace SwashSim_SignalControl
                 SetControlPointDisplay(timingPlan, TimingRing, phaseIndex, ControlDisplayIndication.Yellow);
                 PhaseAndIntervalFound = true;
             }
-            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime == timeToAdvanceToStartOfCycle)
+            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime == cycleLen)  //timeToAdvanceToStartOfCycle
             {
                 timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].Display[timeIndex] = ControlDisplayIndication.Red;
                 timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].AllRedTimeElapsed = 0;
@@ -205,7 +221,7 @@ namespace SwashSim_SignalControl
                 SetControlPointDisplay(timingPlan, TimingRing, phaseIndex, ControlDisplayIndication.Red);
                 PhaseAndIntervalFound = true;
             }
-            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].AllRedTime >= timeToAdvanceToStartOfCycle)
+            else if (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].AllRedTime >= cycleLen)  //timeToAdvanceToStartOfCycle
             {
                 PhaseTimeElapsed = (cumulativeCycleTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].GreenMax + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].YellowTime + timingPlan.TimingRings[TimingRing.Id - 1].Phases[phaseIndex].AllRedTime) - timeToAdvanceToStartOfCycle;
 

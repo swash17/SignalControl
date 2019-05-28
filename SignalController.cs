@@ -13,12 +13,22 @@ namespace SwashSim_SignalControl
         RampMetering,
         Pedestrian
     }
-    
+
+    public enum DetectorType
+    {
+        Passage,
+        Presence,
+        IntermediateQueue,
+        AdvanceQueue,
+        Mainline
+    }
+
     public class SignalController //Parent class to determine which controller type to use
     {
         byte _Id;
         string _label;
         SignalControlMode _controlMode;
+        DetectorType _type;
         bool _isMaster;
         float _localClockCurrentTimeSeconds;
         List<uint> _associatedLinkIds;
@@ -46,6 +56,7 @@ namespace SwashSim_SignalControl
         public byte Id { get => _Id; set => _Id = value; }
         public string Label { get => _label; set => _label = value; }
         public SignalControlMode ControlMode { get => _controlMode; set => _controlMode = value; }
+        public DetectorType Type { get => _type; set => _type = value; }
         public float LocalClockCurrentTimeSeconds { get => _localClockCurrentTimeSeconds; set => _localClockCurrentTimeSeconds = value; }
         public bool IsMaster { get => _isMaster; set => _isMaster = value; }
         public List<uint> AssociatedLinkIds { get => _associatedLinkIds; set => _associatedLinkIds = value; }
@@ -72,7 +83,5 @@ namespace SwashSim_SignalControl
             string LinkIDsString = linksLIst.ToString();
             return LinkIDsString;
         }
-
-
     }
 }

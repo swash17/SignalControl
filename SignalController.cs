@@ -13,7 +13,7 @@ namespace SwashSim_SignalControl
         RampMetering,
         Pedestrian
     }
-
+    /*
     public enum DetectorType
     {
         Passage,
@@ -22,7 +22,7 @@ namespace SwashSim_SignalControl
         AdvanceQueue,
         Mainline
     }
-
+    */
     public class SignalController //Parent class to determine which controller type to use
     {
         byte _Id;

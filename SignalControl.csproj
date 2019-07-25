@@ -41,14 +41,6 @@
     <Reference Include="SwashSim_VehicleDetector">
       <HintPath>..\Inputs_Main\VehicleDetectors\bin\Debug\SwashSim_VehicleDetector.dll</HintPath>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActDualRingController.cs" />

@@ -4,21 +4,16 @@ using System.Collections.Generic;
 
 namespace SwashSim_SignalControl
 {
-
-    
-
     public class TimingStageData
     {
         byte _id;
         bool _isEnabled = false;
         List<byte> _includedPhases;
-
         private Single _greenMin;
         private Single _greenMax;
         private Single _yellowTime;
         private Single _redTime;
         private Single _allRedTime;
-
 
         public TimingStageData(byte id)
         {
@@ -31,7 +26,6 @@ namespace SwashSim_SignalControl
             _yellowTime = 3;
             _allRedTime = 2;
         }
-
 
         public byte Id
         {
@@ -80,7 +74,6 @@ namespace SwashSim_SignalControl
             get { return _allRedTime; }
             set { _allRedTime = value; }
         }
-
 
     }
 }

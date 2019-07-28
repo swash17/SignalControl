@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
 
-
-
 namespace SwashSim_SignalControl
 {
-
-
     public class TimingPlanData
     {
         uint _id;
@@ -17,7 +13,6 @@ namespace SwashSim_SignalControl
         uint _endTimeSeconds;
         bool _isRunningCoordination;
         CoordinationData _coordination;
-
 
         public TimingPlanData(byte id, string label)  // byte[] ringOneIncludedPhases, byte[] ringTwoIncludedPhases, Single[,] ringOnePhaseIntervalTimes, Single[,] ringTwoPhaseIntervalTimes)
         {

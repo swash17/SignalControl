@@ -2,13 +2,10 @@
 using SwashSim_VehControlPoint;
 using SwashSim_VehicleDetector;
 
-
-
 namespace SwashSim_SignalControl
 {
     public class SignalControllerActuated : SignalController
     {
-        
         protected ControllerPhases _phases;
         InterGreens _interGreens;
         List<ActTimingPlan> _timingPlans;
@@ -19,7 +16,6 @@ namespace SwashSim_SignalControl
         protected double _elapsedSimTime;
         List<SignalStatusConvertor> _convertors;
 
-        
         public ControllerPhases Phases
         {
             get { return _phases; }
@@ -184,7 +180,6 @@ namespace SwashSim_SignalControl
             }
         }
         //-----------------------------------------------------------------------
-
 
         public void RecordPhaseStatus()
         {

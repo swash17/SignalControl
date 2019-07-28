@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using SwashSim_VehControlPoint;
 
-
 namespace SwashSim_SignalControl
 {    
-
     public enum StopBarIndication
     {
         None,
@@ -18,13 +16,11 @@ namespace SwashSim_SignalControl
         Green = 0,
         Yellow = 1,
         Red = 2,
-        Orange = 3,
+        Orange = 3
     }
-
 
     public class SignalControllerPretimed : SignalController
     {
-
         List<TimingPlanData> _timingPlans;        
 
         public SignalControllerPretimed(byte id, SignalControlMode controlMode, string label = "") : base(id, controlMode, label)
@@ -35,7 +31,6 @@ namespace SwashSim_SignalControl
 
         public List<TimingPlanData> TimingPlans { get => _timingPlans; set => _timingPlans = value; }
         
-
         public void SetCoordinationParms(SignalControllerPretimed signal)
         {            
             foreach (TimingPlanData timingPlan in signal.TimingPlans)
@@ -72,8 +67,6 @@ namespace SwashSim_SignalControl
             //}
             //}
         }
-
-
 
         public void InitializeTimingStages(TimingPlanData timingPlan, bool isMasterController, float masterSignalRefPhaseOffset)
         {
@@ -118,7 +111,6 @@ namespace SwashSim_SignalControl
                     //TimeToStartRefPhaseAfterCycleZeroPoint = timingPlan.Coordination.ReferencePhaseCycleOffset + timingPlan.Coordination.ReferencePhaseOffsetRelativeToMasterSeconds;
                     TimeBetweenStartOfRefPhaseAndCycleEnd = timingPlan.Coordination.CycleLength - CoordRefPhaseCycleStartTime;
                
-
                 foreach (TimingRingData TimingRing in timingPlan.TimingRings)
                 {
                     int PhaseSequenceIndex = -1;
@@ -169,7 +161,6 @@ namespace SwashSim_SignalControl
                 }
             }
         }
-
 
         private bool IdentifyStartingPhaseAndInterval(TimingPlanData timingPlan, TimingRingData TimingRing, byte phaseId, int phaseIndex, int timeIndex, float cumulativeCycleTime, float timeToAdvanceToStartOfCycle, float cycleLen)
         {
@@ -247,7 +238,6 @@ namespace SwashSim_SignalControl
             return PhaseAndIntervalFound;
         }
 
-
         private void SetControlPointDisplay(TimingPlanData timingPlan, TimingRingData TimingRing, int PhaseIndex, ControlDisplayIndication displayInterval)
         {
             foreach (VehicleControlPointData ControlPoint in timingPlan.TimingRings[TimingRing.Id - 1].Phases[PhaseIndex].AssociatedControlPoints)
@@ -255,12 +245,6 @@ namespace SwashSim_SignalControl
                 ControlPoint.DisplayIndication = displayInterval;
             }
         }
-
-
-
-
-
-
 
     }
 }

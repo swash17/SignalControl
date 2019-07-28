@@ -61,7 +61,7 @@ namespace SwashSim_SignalControl
         public VehicleControlPointsList VehicleControlPoints { get => _vehicleControlPoints; set => _vehicleControlPoints = value; }
         public DetectorsList Detectors { get => _detectors; set => _detectors = value; }
 
-        public void QueueOverride(VehicleControlPointData controlpoint, DetectorsList detectors, List<LinkData> links, int timeIndex)
+        public void QueueOverride(SignalControllerOnRamp rampController, DetectorsList detectors, int timeIndex)
         {
             string DetectorLableToCheck = "AdvanceQueueDetector";
             int DetectorIndex = detectors.FindIndex(Detector => Detector.Label.Equals(DetectorLableToCheck));
@@ -70,7 +70,13 @@ namespace SwashSim_SignalControl
                 bool DetectorOccupied = detectors[DetectorIndex].IsOccupied;
                 if (DetectorOccupied == true)
                 {
-                    controlpoint.DisplayIndication = ControlDisplayIndication.Green;
+                    for (int j = 0; j <= 40; j++)
+                    {
+                        if (j <= 20)
+                            rampController.Phases[0].Display[timeIndex] = ControlDisplayIndication.Green;
+                        else
+                            rampController.Phases[0].Display[timeIndex] = ControlDisplayIndication.Red;
+                    }
                 }
             }
         }

@@ -41,6 +41,8 @@
     <Reference Include="SwashSim_VehicleDetector">
       <HintPath>..\Inputs_Main\VehicleDetectors\bin\Debug\SwashSim_VehicleDetector.dll</HintPath>
     </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActDualRingController.cs" />

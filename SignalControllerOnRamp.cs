@@ -61,5 +61,6 @@ namespace SwashSim_SignalControl
         public List<PhaseData> Phases { get => _phases; set => _phases = value; }
         public VehicleControlPointsList VehicleControlPoints { get => _vehicleControlPoints; set => _vehicleControlPoints = value; }
         public DetectorsList Detectors { get => _detectors; set => _detectors = value; }
+        public CoordinationData Coordination { get => _coordination; set => _coordination = value; }
     }
 }

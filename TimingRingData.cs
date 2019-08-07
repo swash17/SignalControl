@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
-
-
 namespace SwashSim_SignalControl
 {
-
-
     public class TimingRingData
     {
 
@@ -17,7 +12,6 @@ namespace SwashSim_SignalControl
         byte _activePhaseIndex;
         byte _currentGreenPhaseId;
         byte _nextGreenPhaseId;
-
 
         public TimingRingData()
         {

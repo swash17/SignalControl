@@ -245,6 +245,5 @@ namespace SwashSim_SignalControl
                 ControlPoint.DisplayIndication = displayInterval;
             }
         }
-
     }
 }

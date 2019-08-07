@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
 
-
-
 namespace SwashSim_SignalControl
 {
-
     public class CoordinationMasterClock
     {
         byte _id;
@@ -20,8 +17,7 @@ namespace SwashSim_SignalControl
         public float MaxTimeSeconds { get => _maxTimeSeconds; set => _maxTimeSeconds = value; }
         public List<byte> AssociatedSignalControllerIds { get => _associatedSignalControllerIds; set => _associatedSignalControllerIds = value; }
     }
-
-
+    
     public class CoordinationData
     {
         byte _masterSignalId;
@@ -34,7 +30,6 @@ namespace SwashSim_SignalControl
         float _referencePhaseCycleOffset;
         float _referencePhaseOffsetRelativeToMasterSeconds;
 
-
         public byte MasterSignalId { get => _masterSignalId; set => _masterSignalId = value; }
         public float OffsetPctOfCycle { get => _offsetPctOfCycle; set => _offsetPctOfCycle = value; }
         public byte OffsetReferencePhaseId { get => _offsetReferencePhaseId; set => _offsetReferencePhaseId = value; }
@@ -43,8 +38,6 @@ namespace SwashSim_SignalControl
         public float ForceOffPctOfCycle { get => _forceOffPctOfCycle; set => _forceOffPctOfCycle = value; }
         public float ReferencePhaseCycleOffset { get => _referencePhaseCycleOffset; set => _referencePhaseCycleOffset = value; }
         public float ReferencePhaseOffsetRelativeToMasterSeconds { get => _referencePhaseOffsetRelativeToMasterSeconds; set => _referencePhaseOffsetRelativeToMasterSeconds = value; }
-
         public int ReferenceTimingStageIndex { get => _referenceTimingStageIndex; set => _referenceTimingStageIndex = value; }
-
     }
 }

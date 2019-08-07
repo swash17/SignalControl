@@ -45,6 +45,7 @@ namespace SwashSim_SignalControl
         VehicleControlPointsList _vehicleControlPoints;
         DetectorsList _detectors;
         List<PhaseData> _phases;
+        CoordinationData _coordination;
 
         public SignalControllerOnRamp(byte id, SignalControlMode controlMode, RampMeterControlAlgorithm controlAlgorithm, string label = "") : base(id, controlMode, label)
         {
@@ -60,7 +61,5 @@ namespace SwashSim_SignalControl
         public List<PhaseData> Phases { get => _phases; set => _phases = value; }
         public VehicleControlPointsList VehicleControlPoints { get => _vehicleControlPoints; set => _vehicleControlPoints = value; }
         public DetectorsList Detectors { get => _detectors; set => _detectors = value; }
-
-        
     }
 }

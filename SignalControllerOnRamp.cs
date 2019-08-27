@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SwashSim_VehControlPoint;
 using SwashSim_VehicleDetector;
-using SwashSim_Network;
+
 
 namespace SwashSim_SignalControl
 {
@@ -36,7 +36,52 @@ namespace SwashSim_SignalControl
         public VehicleControlPointsList VehicleControlPoints { get => _vehicleControlPoints; set => _vehicleControlPoints = value; }
         public DetectorsList Detectors { get => _detectors; set => _detectors = value; }
         public ControlDisplayIndication[] Display { get => _display; set => _display = value; }
+
+        //The following two methods are duplicates of the ones in PhaseTimingData class (TimingPhaseData.cs file)
+        public string ConvertControlPointIdListToString(List<VehicleControlPointData> controlPoints)
+        {
+            //Create string of vehicle control point IDs using comma to separate
+            System.Text.StringBuilder controlPointsList = new System.Text.StringBuilder();
+
+            int TotalControlPoints = controlPoints.Count;
+            int NumControlPoints = 0;
+
+            foreach (VehicleControlPointData controlPoint in controlPoints)
+            {
+                //controlPointsList.Append(controlPoint.Id.ToString());
+                controlPointsList.Append(controlPoint.LinkId.ToString() + "-" + controlPoint.Id.ToString());
+                NumControlPoints++;
+
+                if (NumControlPoints < TotalControlPoints)
+                    controlPointsList.Append(",");
+            }
+
+            string ControlPointIDs = controlPointsList.ToString();
+            return ControlPointIDs;
+        }
+
+        public string ConvertDetectorIdListToString(List<DetectorData> detectors)
+        {
+            //Create string of Detector IDs using comma to separate
+            System.Text.StringBuilder DetectorList = new System.Text.StringBuilder();
+
+            int TotalDetectors = detectors.Count;
+            int NumDetectors = 0;
+
+            foreach (DetectorData detector in detectors)
+            {
+                DetectorList.Append(detector.LinkId.ToString() + "-" + detector.Id.ToString());
+                NumDetectors++;
+
+                if (NumDetectors < TotalDetectors)
+                    DetectorList.Append(",");
+            }
+
+            string DetectorIDs = DetectorList.ToString();
+            return DetectorIDs;
+        }
     }
+
 
     public class SignalControllerOnRamp : SignalController
     {
@@ -62,5 +107,6 @@ namespace SwashSim_SignalControl
         public VehicleControlPointsList VehicleControlPoints { get => _vehicleControlPoints; set => _vehicleControlPoints = value; }
         public DetectorsList Detectors { get => _detectors; set => _detectors = value; }
         public bool IsCoordinated { get => _isCoordinated; set => _isCoordinated = value; }
+        
     }
 }

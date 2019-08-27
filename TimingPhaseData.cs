@@ -116,7 +116,6 @@ namespace SwashSim_SignalControl
         
         public string ConvertDetectorIdListToString(List<DetectorData> detectors)
         {
-
             //Create string of Detector IDs using comma to separate
             System.Text.StringBuilder DetectorList = new System.Text.StringBuilder();
 
